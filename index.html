@@ -1,11 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>NanoBanana Studio</title>
+    <title>Gemini AI Studio</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -13,6 +12,8 @@
           extend: {
             animation: {
               'gradient-text': 'gradient-text 5s ease infinite',
+              'fade-in-slide-up': 'fade-in-slide-up 0.3s ease-out forwards',
+              'typing-bounce': 'typing-bounce 1.2s infinite ease-in-out',
             },
             keyframes: {
               'gradient-text': {
@@ -24,6 +25,14 @@
                   'background-size': '200% 200%',
                   'background-position': 'right center'
                 }
+              },
+              'fade-in-slide-up': {
+                '0%': { opacity: '0', transform: 'translateY(10px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+              },
+              'typing-bounce': {
+                '0%, 100%': { transform: 'translateY(0)' },
+                '50%': { transform: 'translateY(-6px)' },
               }
             }
           }

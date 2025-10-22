@@ -1,5 +1,7 @@
 {
-  "name": "NanoBanana Studio",
-  "description": "An AI-powered photo editing application that uses the Gemini 'nanobanana' model to edit images based on text prompts. Upload an image, describe your desired changes, and let the AI bring your vision to life.",
-  "requestFramePermissions": []
+  "name": "Gemini AI Studio",
+  "description": "An AI-powered creative and analytical studio that uses a suite of Gemini models to chat, generate and edit images, create videos, analyze content, and more.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
 }

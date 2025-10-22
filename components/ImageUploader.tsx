@@ -3,9 +3,10 @@ import React, { useCallback, useState } from 'react';
 
 interface ImageUploaderProps {
   onImageUpload: (file: File) => void;
+  accept?: string;
 }
 
-const ImageUploader: React.FC<ImageUploaderProps> = ({ onImageUpload }) => {
+const ImageUploader: React.FC<ImageUploaderProps> = ({ onImageUpload, accept = "image/*" }) => {
   const [isDragging, setIsDragging] = useState(false);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -19,9 +20,24 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ onImageUpload }) => {
     e.stopPropagation();
     setIsDragging(false);
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      onImageUpload(e.dataTransfer.files[0]);
+      // Check if the file type is accepted
+      const file = e.dataTransfer.files[0];
+      const acceptedTypes = accept.split(',').map(t => t.trim());
+      const isAccepted = acceptedTypes.some(type => {
+        if (type.endsWith('/*')) {
+          return file.type.startsWith(type.slice(0, -2));
+        }
+        return file.type === type;
+      });
+
+      if (isAccepted) {
+        onImageUpload(file);
+      } else {
+        // Optionally, provide feedback to the user about the wrong file type
+        alert(`Invalid file type. Please upload one of: ${accept}`);
+      }
     }
-  }, [onImageUpload]);
+  }, [onImageUpload, accept]);
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -51,7 +67,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ onImageUpload }) => {
       >
         <input
           type="file"
-          accept="image/*"
+          accept={accept}
           onChange={handleFileChange}
           className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
           id="file-upload"
@@ -59,10 +75,10 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ onImageUpload }) => {
         <label htmlFor="file-upload" className="flex flex-col items-center justify-center space-y-4 cursor-pointer">
           <svg className="w-16 h-16 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
           <p className="text-xl font-semibold text-gray-300">
-            Drag & drop your image here
+            Drag & drop your file here
           </p>
           <p className="text-gray-400">or click to browse</p>
-           <p className="text-xs text-gray-500 mt-2">PNG, JPG, WEBP, etc.</p>
+           <p className="text-xs text-gray-500 mt-2">{accept.replace('/*', ' files')}</p>
         </label>
       </div>
     </div>
